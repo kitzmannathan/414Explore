@@ -38,8 +38,8 @@
  
  
 ## Logic
-- limit login attempts to 5
-- console log successful login: "username" has logged in "date:time"
-- console log unsuccessful login: "username" has attempted to log in "date:time" attempt # "#"
-- save log in attempts to text file
-- express server backend to call data
+- [ ] limit login attempts to 5
+- [ ] console log successful login: "username" has logged in "date:time"
+- [ ] console log unsuccessful login: "username" has attempted to log in "date:time" attempt # "#"
+- [ ] save log in attempts to text file
+- [ ] express server backend to call data
