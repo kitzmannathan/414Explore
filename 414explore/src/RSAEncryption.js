@@ -1,17 +1,19 @@
 module.exports = {
-    generateKeys: function (message){
-        let primes = generatePrimes(193n, 255n);
+    //the first key in the array is the public key the second key is the private key and the third is the modules
+
+    generateKeys: function (){
+        //let primes = generatePrimes(193n, 255n);
+        let primes = generatePrimes(1n, 255n);
         let publicKey = primes[Math.floor(Math.random() * primes.length)]
         let privateKey = primes[Math.floor(Math.random() * primes.length)]
         let n = privateKey * publicKey
         let upper = ((publicKey - 1n) * (privateKey - 1n)) / (greatestCommonDivisor(publicKey - 1n, privateKey - 1n))
-        let e = 17n// = generateEValue(publicKey-1n,privateKey-1n, upper);
+        let e = 17n;
         while (greatestCommonDivisor(e, upper) !== 1n) {
             publicKey = primes[Math.floor(Math.random() * primes.length)]
             privateKey = primes[Math.floor(Math.random() * primes.length)]
             n = privateKey * publicKey
             upper = ((publicKey - 1n) * (privateKey - 1n)) / (greatestCommonDivisor(publicKey - 1n, privateKey - 1n))
-            //e = generateEValue(publicKey-1,privateKey-1);
         }
         let d = modInverse(e, upper)
         return [e, d, n]
@@ -58,14 +60,14 @@ const greatestCommonDivisor = (x,y) =>{
     let GCD = 1n
     if(x > y) {
         for(let i = 1n; i < y+1n; i++) {
-            if (x % i == 0n && y % i == 0n) {
+            if (x % i === 0n && y % i === 0n) {
                 GCD = i
             }
         }
     }
     else {
         for(let i = 1n; i < x+1n; i++) {
-            if (x % i == 0n && y % i == 0n) {
+            if (x % i === 0n && y % i === 0n) {
                 GCD = i
             }
         }
@@ -74,7 +76,7 @@ const greatestCommonDivisor = (x,y) =>{
 }
 
 const generateEValue = (p,q, upper) =>{
-    for(let i = 2n; i < upper; i++){
+    for(let i = upper-1n; i >= 2n; i--){
         if(greatestCommonDivisor(i,upper) === 1n){
             return i;
         }
