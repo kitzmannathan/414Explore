@@ -2,8 +2,7 @@ module.exports = {
     //the first key in the array is the public key the second key is the private key and the third is the modules
 
     generateKeys: function (){
-        //let primes = generatePrimes(193n, 255n);
-        let primes = generatePrimes(1n, 255n);
+        let primes = generatePrimes(193n, 255n);
         let publicKey = primes[Math.floor(Math.random() * primes.length)]
         let privateKey = primes[Math.floor(Math.random() * primes.length)]
         let n = privateKey * publicKey
