@@ -196,6 +196,7 @@ function CreateProfile() {
     //     }
     // })
   return (
+      <div>
     <div className="App">
       {view==="first"&&(
       <div className='loginModal'>
@@ -332,7 +333,7 @@ function CreateProfile() {
             </h4>
           </div>
       )}
-
+    </div>
       {(view=="events") && (
         <Events/>
       )}

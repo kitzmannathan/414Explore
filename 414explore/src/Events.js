@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Events.css';
+import rsa from "./RSAEncryption";
+import keysFile from "./keys.json"
+let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)]
+
 
 const Events = () => {
     const [events, setEvents] = useState([]);
@@ -7,10 +11,15 @@ const Events = () => {
     const [selectedTags, setSelectedTags] = useState([]);
 
     useEffect(() => {
-        fetch('/path/to/Events.json')
+        fetch('http://localhost:3001/get-Events', {
+            headers: {
+                "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+            }
+        })
             .then(response => response.json())
             .then(data => {
-                const flattenedEvents = data.organizers.flatMap(org => org.events);
+                console.log(data)
+                const flattenedEvents = data.msg[0].organizers.flatMap(org => org.events);
                 setEvents(flattenedEvents);
                 setFilteredEvents(flattenedEvents);
             });
@@ -48,7 +57,7 @@ const Events = () => {
     return (
         <div>
             <nav className="navbar navbar-light bg-light">
-                <form className="form-inline">
+                <form>
                     <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
                     <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
