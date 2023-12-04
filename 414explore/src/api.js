@@ -42,10 +42,10 @@ app.get('/create-User', function(req, res, next) {
         let transportationPreference = req.query.transportationPreference;
         //if a required header is missing respond with an error
         if (userName === undefined || email === undefined || password === undefined || userType === undefined) {
-            res.status(400).send("Missing required data");
+            res.status(400).send({"msg":"Missing required data"});
         } else {
             if (intrests !== undefined && intrests.at(0) !== "[" && intrests.at(intrests.length - 1) !== "]") {
-                res.status(400).send("intrests should be an array");
+                res.status(400).send({"msg":"intrests should be an array"});
             } else {
                 let temp = []
                 let intrestsArray = []
@@ -136,18 +136,18 @@ app.get('/get-Communities', function(req, res, next) {
 app.get('/get-User', function(req, res, next) {
     //if authorization was passed as a header and it is the correct password then try to return the user info
     if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
-        let userName = req.query.userName;
+        let email = req.query.email;
         let users = JSON.parse(fs.readFileSync("./src/Users.json", "utf-8"));
-        if (userName === undefined) {
+        if (email === undefined) {
             res.status(400).send({
                 "status": "fail",
-                "msg": "Username not defined"
+                "msg": "Email not defined"
             });
         } else {
             let found = false;
             let foundUser = {};
             users.forEach(user => {
-                if (user.userName === userName) {
+                if (user.email === email) {
                     found = true;
                     foundUser = user;
                 }
@@ -177,10 +177,10 @@ app.get('/get-User', function(req, res, next) {
 app.get('/login', function(req, res, next) {
     //if authorization was passed as a header and it is the correct password then try to return the user info
     if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
-        let userName = req.query.userName;
+        let email = req.query.email;
         let password = req.query.password;
         let users = JSON.parse(fs.readFileSync("./src/Users.json", "utf-8"));
-        if (userName === undefined || password === undefined) {
+        if (email === undefined || password === undefined) {
             res.status(400).send({
                 "status": "fail",
                 "msg": "Username or password not defined"
@@ -189,12 +189,14 @@ app.get('/login', function(req, res, next) {
             let found = false;
             let foundUser = {};
             users.forEach(user => {
-                if (user.userName === userName) {
+                if (user.email === email) {
                     found = true;
                     foundUser = user;
                 }
             });
             if (found) {
+                console.log(rsa.decrypt(password, [keys[1], keys[2]]))
+                console.log(foundUser.password)
                 if(rsa.decrypt(password, [keys[1], keys[2]]) === foundUser.password){
                     res.status(200).send({
                         "status": "success",
