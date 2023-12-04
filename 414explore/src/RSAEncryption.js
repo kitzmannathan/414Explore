@@ -3,18 +3,22 @@ module.exports = {
 
     generateKeys: function (){
         let primes = generatePrimes(193n, 255n);
-        let publicKey = primes[Math.floor(Math.random() * primes.length)]
-        let privateKey = primes[Math.floor(Math.random() * primes.length)]
-        let n = privateKey * publicKey
-        let upper = ((publicKey - 1n) * (privateKey - 1n)) / (greatestCommonDivisor(publicKey - 1n, privateKey - 1n))
+        let prime1 = primes[Math.floor(Math.random() * primes.length)]
+        let prime2 = primes[Math.floor(Math.random() * primes.length)]
+        while(prime1 === prime2){
+            prime2 = primes[Math.floor(Math.random() * primes.length)]
+        }
+        let n = prime1 * prime2
+        let upper = ((prime1 - 1n) * (prime2 - 1n)) / (greatestCommonDivisor(prime1 - 1n, prime2 - 1n))
         let e = 17n;
         while (greatestCommonDivisor(e, upper) !== 1n) {
-            publicKey = primes[Math.floor(Math.random() * primes.length)]
-            privateKey = primes[Math.floor(Math.random() * primes.length)]
-            n = privateKey * publicKey
-            upper = ((publicKey - 1n) * (privateKey - 1n)) / (greatestCommonDivisor(publicKey - 1n, privateKey - 1n))
+            prime1 = primes[Math.floor(Math.random() * primes.length)]
+            prime2 = primes[Math.floor(Math.random() * primes.length)]
+            n = prime1 * prime2
+            upper = ((prime1 - 1n) * (prime2 - 1n)) / (greatestCommonDivisor(prime1 - 1n, prime2 - 1n))
         }
         let d = modInverse(e, upper)
+        console.log(d)
         return [e, d, n]
     },
 
