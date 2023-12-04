@@ -1,24 +1,30 @@
 import './CreateProfile.css';
 import { useState } from 'react';
 import emailjs from 'emailjs-com';
-// import keysFile from "./keys.json"
+import keysFile from "./keys.json"
 import rsa from "./RSAEncryption";
 // var url = new URL("http://localhost:3001/create-User?userName=test&password="+rsa.encrypt("test", keys) + "&email=test@email.com&userType=user");
 
 
-// let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)]
+let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)]
 function CreateProfile() {
 
   const [view, setView] = useState("first");
   const [verificationCode, setVerificationCode] = useState(0);
   const [userEmail, setUserEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [interests, setInterests] = useState("");
+  const [age, setAge] = useState("");
+  const [school, setSchool] = useState("");
+  const [location, setLocation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [signinTries, setSigninTries] = useState(6);
   
   const [password, setPassword] = useState("");
-  
+
+  const validInterests = ["music","food","festival","fair","pop","metal","rock","country","alternative","r&b","rap"]
+
   const sendEmail = (e) => {
     e.preventDefault(); 
     let num = Math.floor(1000 + Math.random() * 9000);
@@ -46,18 +52,69 @@ function CreateProfile() {
   }
   const validateInformation = (e) =>{
     e.preventDefault();
-    const usernameRegex = /^[a-z0-9_.]+$/;
+    const usernameRegex = /^[A-Za-z0-9_.]+$/;
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    const ageRegex = /^\d+$/;
     if(usernameRegex.test(e.target.username.value)){
       console.log(e.target.pass.value);
       if(passwordRegex.test(e.target.pass.value)){
-        if(e.target.password.value === e.target.pass2.value){
-          setUsername(e.target.username.value);
-          setPassword(e.target.pass.value);
-          setView("userInfo");
-          // url.set("userName", `${e.target.username.value}`);
-          // url.set("password", `${e.target.pass.value}`);
-          // url.set("email", `${userEmail}`);
+        if(e.target.pass.value === e.target.pass2.value){
+          if(e.target.age.value === "" || (ageRegex.test(e.target.age.value) && parseInt(e.target.age.value) >= 18 && parseInt(e.target.age.value) <= 25)) {
+            if(e.target.school.value === "" || e.target.school.value === "MSOE" || e.target.school.value === "UWM" || e.target.school.value === "MU" || e.target.school.value === "MIAD") {
+              let interests = "";
+              let create = true;
+              if (e.target.intrests.value === "") {
+                interests = "[]";
+              } else if (!e.target.intrests.value.includes(",") && validInterests.includes(e.target.intrests.value)) {
+                interests = "[" + e.target.intrests.value + "]";
+              } else if (e.target.intrests.value.includes(",")) {
+                let valid = true;
+                e.target.intrests.value.split(",").forEach(item => {
+                  if (!validInterests.includes(item.trim())) {
+                    valid = false;
+                  }
+                });
+                if (valid) {
+                  interests = "[" + e.target.intrests.value + "]";
+                } else {
+                  create = false;
+                  alert("Interests list contains non valid interests");
+                }
+              } else {
+                create = false;
+                alert("Interests list is not valid");
+              }
+
+              if (create) {
+                fetch("http://localhost:3001/create-User?userName=" + e.target.username.value + "&password=" + rsa.encrypt(e.target.pass.value, keys) + "&email=" + userEmail + "&userType=user&school=" + e.target.school.value + "&age=" + e.target.age.value + "&intrests=" + interests + "&location=" + e.target.location.value, {
+                  headers: {
+                    "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+                  }
+                }).then(response => {
+                  return response.json();
+                }).then(data => {
+                  console.log(data);
+                  if (data.status === "fail") {
+                    alert(data.msg)
+                  } else {
+                    setUsername(e.target.username.value);
+                    setPassword(e.target.pass.value);
+                    setInterests(interests);
+                    setSchool(e.target.school.value);
+                    setAge(e.target.age.value);
+                    setLocation(e.target.location.value);
+                    setView("userInfo");
+                  }
+                });
+              }
+            }
+            else {
+              window.alert("School code is not valid. Valid options are MSOE, UWM, MU, and MIAD");
+            }
+          }
+          else{
+            window.alert("Age must be number between 18 and 25");
+          }
         } else{
           window.alert("Passwords do not match");
         }
@@ -77,12 +134,39 @@ function CreateProfile() {
       window.alert("You have reached you sign in attempt limit, please try again later");
       e.target.signinButton.disabled = true;
     }
-    if(email !== "davisbr@msoe.edu" || password !== "adminEnter23"){
-      window.alert("Email or password incorrect");
-      console.log(signinTries);
-      setSigninTries(signinTries-1);
-    }
-
+    fetch("http://localhost:3001/login?email="+ email +"&password="+rsa.encrypt(password, keys), {
+          headers: {
+              'Authorization':rsa.encrypt("414ExploreAdmin!", keys)
+          }}).then(response => {
+      return response.json();
+    }).then(data => {
+      console.log(data);
+      if(data.status === "fail"){
+        alert(data.msg);
+        console.log(signinTries);
+        setSigninTries(signinTries-1);
+      }
+      else{
+        fetch("http://localhost:3001/get-User?email="+email, {
+          headers: {
+            'Authorization':rsa.encrypt("414ExploreAdmin!", keys)
+          }}).then(response2 => {
+          return response2.json();
+        }).then(user => {
+          let interests = "";
+          user.msg.intrests.forEach(item =>{
+            interests += item +" ";
+          })
+          setUsername(user.msg.userName);
+          setUserEmail(user.msg.email);
+          setInterests(interests);
+          setSchool(user.msg.school);
+          setAge(user.msg.age);
+          setLocation(user.msg.location);
+          setView("userInfo");
+      });
+      }
+    });
   }
 
     // fetch("http://localhost:3001/login?userName=what&password="+rsa.encrypt("huh", keys), {
@@ -155,11 +239,32 @@ function CreateProfile() {
         <div className='loginModal'>
 
           <form onSubmit={validateInformation} id="unPW">
-
+            <label>
+              Intrests:
+            </label>
+            <p className='instructions'>Enter your interests as a coma seperated list valid intrests are {validInterests.map(item =>{
+              return item + " "
+            })}</p>
+            <input type='text' name='intrests' className='upInput'/>
+            <label>
+              Age:
+            </label>
+            <p className='instructions'>Enter your age</p>
+            <input type='text' name='age' className='upInput'/>
+            <label>
+              School:
+            </label>
+            <p className='instructions'>Enter your Code</p>
+            <input type='text' name='school' className='upInput'/>
+            <label>
+              Location:
+            </label>
+            <p className='instructions'>Enter your location</p>
+            <input type='text' name='location' className='upInput'/>
             <label>
               Username:
             </label>
-            <p className='instructions'>Your username can contain letters, numbers, underscores and periods.</p>
+           <p className='instructions'>Your username can contain letters, numbers, underscores and periods.</p>
             <input type='text' name='username' value={username} onChange={(e) => setUsername(e.target.value)} className='upInput'/>
 
 
@@ -201,6 +306,29 @@ function CreateProfile() {
             <input id='signin' type='submit' value="Sign In" name='signinButton' className='topButton'/>
           </form>
         </div>
+      )}
+
+      {(view==="userInfo") &&(
+          <div>
+            <h4>
+              User name: {username}
+            </h4>
+            <h4>
+              Email: {userEmail}
+            </h4>
+            <h4>
+              Age: {age}
+            </h4>
+            <h4>
+              Interests: {interests}
+            </h4>
+            <h4>
+              School: {school}
+            </h4>
+            <h4>
+              Location: {location}
+            </h4>
+          </div>
       )}
       
     </div>
