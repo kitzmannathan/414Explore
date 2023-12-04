@@ -9,19 +9,17 @@
             {
               "year": 2024,
               "month": "July",
-              "days": [ 1, 2, 3, 4, 5, 6, 11, 12, 13 ]
+              "days": [1, 2, 3, 4, 5, 6, 11, 12, 13]
             }
           ],
-          "address": [
-            {
-              "street": "639 E Summerfest Pl",
-              "city": "Milwaukee",
-              "state": "WI",
-              "zipcode": "53202",
-              "country": "United States"
-            }
-          ],
-          "description": "Summerfest® presented by American Family Insurance is all about bringing you shows you’ll brag about and moments that you just can’t miss. More stages and picture-perfect spaces on the lakefront, local eats, drinks, shopping, and even an all-new children’s area for your up-and-coming little rockers. Summerfest will celebrate its 55th anniversary in 2023. To commemorate this iconic milestone, the festival is planning some promotions for the anniversary year.\nWhether you're coming here by plane, train, boat, car, or bus - it's easy to get to Summerfest. Located in Downtown Milwaukee, we're only a 10-minute drive from Mitchell International Airport.",
+          "address": {
+            "street": "639 E Summerfest Pl",
+            "city": "Milwaukee",
+            "state": "WI",
+            "zipcode": "53202",
+            "country": "United States"
+          },
+          "description": "Summerfest® presented by American Family Insurance is all about bringing you shows you’ll brag about and moments that you just can’t miss. More stages and picture-perfect spaces on the lakefront, local eats, drinks, shopping, and even an all-new children’s area for your up-and-coming little rockers. Summerfest will celebrate its 55th anniversary in 2023. To commemorate this iconic milestone, the festival is planning some promotions for the anniversary year. Whether you're coming here by plane, train, boat, car, or bus - it's easy to get to Summerfest. Located in Downtown Milwaukee, we're only a 10-minute drive from Mitchell International Airport.",
           "tags": ["Music", "EDM", "Alternative", "Pop", "$-$$$", "Food", "Festival", "Family-Friendly"]
         }
       ]
@@ -34,29 +32,24 @@
           "dates": [
             {
               "year": 2024,
-              "date": [
-                {
-                  "month": "June",
-                  "days": [ 1, 8, 15, 22, 29, 6, 11, 12, 13 ]
-                },
-                {
-                  "month": "July",
-                  "days": [ 6, 27 ]
-                }
-              ]
-            }
-          ],
-          "address": [
+              "month": "June",
+              "days": [1, 8, 15, 22, 29]
+            },
             {
-              "street": "825 N. Jefferson St.",
-              "city": "Milwaukee",
-              "state": "WI",
-              "zipcode": "53202",
-              "country": "United States"
+              "year": 2024,
+              "month": "July",
+              "days": [6, 27]
             }
           ],
+          "address": {
+            "street": "825 N. Jefferson St.",
+            "city": "Milwaukee",
+            "state": "WI",
+            "zipcode": "53202",
+            "country": "United States"
+          },
           "description": "Jazz in the Park in downtown Milwaukee is the largest weekly free music venue. It attracts up to 5,000 people per week.",
-          "tags": [ "Music", "Jazz", "$-$$$", "Family-Friendly" ]
+          "tags": ["Music", "Jazz", "$-$$$", "Family-Friendly"]
         },
         {
           "name": "Bastille Days",
@@ -64,20 +57,18 @@
             {
               "year": 2024,
               "month": "July",
-              "days": [ 13, 14, 15, 16 ]
+              "days": [13, 14, 15, 16]
             }
           ],
-          "address": [
-            {
-              "street": "825 N. Jefferson St.",
-              "city": "Milwaukee",
-              "state": "WI",
-              "zipcode": "53202",
-              "country": "United States"
-            }
-          ],
-          "description": "Bastille Days in downtown Milwaukee is the largest French themed outdoor festival in America. The free four-day bash attracts over 250,000 annually who enjoy live music an international marketplace, French and Cajun cuisine, and roaming busker entertainment.",
-          "tags": [ "French", "Festival", "Food", "$-$$", "Family-Friendly" ]
+          "address": {
+            "street": "825 N. Jefferson St.",
+            "city": "Milwaukee",
+            "state": "WI",
+            "zipcode": "53202",
+            "country": "United States"
+          },
+          "description": "Bastille Days in downtown Milwaukee is the largest French themed outdoor festival in America. The free four-day bash attracts over 250,000 annually who enjoy live music, an international marketplace, French and Cajun cuisine, and roaming busker entertainment.",
+          "tags": ["French", "Festival", "Food", "$-$$", "Family-Friendly"]
         }
       ]
     },
@@ -90,20 +81,18 @@
             {
               "year": 2023,
               "month": "December",
-              "days": [ 27 ]
+              "days": [27]
             }
           ],
-          "address": [
-            {
-              "street": "1111 Vel R. Phillips Ave",
-              "city": "Milwaukee",
-              "state": "WI",
-              "zipcode": "53202",
-              "country": "United States"
-            }
-          ],
+          "address": {
+            "street": "1111 Vel R. Phillips Ave",
+            "city": "Milwaukee",
+            "state": "WI",
+            "zipcode": "53202",
+            "country": "United States"
+          },
           "description": "Multi-platinum, progressive rock group Trans-Siberian Orchestra (TSO) will host its highly anticipated 2022 winter tour, The Ghosts of Christmas Eve – the Best of TSO & More presented by Hallmark Channel, with two shows at Fiserv Forum on Thursday, December 22 at 3 p.m. and 7:30 p.m.",
-          "tags": [ "Music", "Christmas", "$$-$$$"]
+          "tags": ["Music", "Christmas", "$$-$$$"]
         },
         {
           "name": "Milwaukee Bucks vs Atlanta Hawks",
@@ -111,20 +100,18 @@
             {
               "year": 2023,
               "month": "December",
-              "days": [ 2 ]
+              "days": [2]
             }
           ],
-          "address": [
-            {
-              "street": "1111 Vel R. Phillips Ave",
-              "city": "Milwaukee",
-              "state": "WI",
-              "zipcode": "53202",
-              "country": "United States"
-            }
-          ],
-          "description": "The Milwaulkee Bucks will be going up against the Atlanta Hawks right here in the Buck's home stadium, Fiserv Forum.",
-          "tags": [ "Basketball", "NBA", "$$-$$$"]
+          "address": {
+            "street": "1111 Vel R. Phillips Ave",
+            "city": "Milwaukee",
+            "state": "WI",
+            "zipcode": "53202",
+            "country": "United States"
+          },
+          "description": "The Milwaukee Bucks will be going up against the Atlanta Hawks right here in the Buck's home stadium, Fiserv Forum.",
+          "tags": ["Basketball", "NBA", "$$-$$$"]
         }
       ]
     }

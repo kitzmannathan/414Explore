@@ -3,6 +3,7 @@ import { useState } from 'react';
 import emailjs from 'emailjs-com';
 import keysFile from "./keys.json"
 import rsa from "./RSAEncryption";
+import Events from './Events';
 // var url = new URL("http://localhost:3001/create-User?userName=test&password="+rsa.encrypt("test", keys) + "&email=test@email.com&userType=user");
 
 
@@ -157,13 +158,14 @@ function CreateProfile() {
           user.msg.intrests.forEach(item =>{
             interests += item +" ";
           })
-          setUsername(user.msg.userName);
-          setUserEmail(user.msg.email);
-          setInterests(interests);
-          setSchool(user.msg.school);
-          setAge(user.msg.age);
-          setLocation(user.msg.location);
-          setView("userInfo");
+          // setUsername(user.msg.userName);
+          // setUserEmail(user.msg.email);
+          // setInterests(interests);
+          // setSchool(user.msg.school);
+          // setAge(user.msg.age);
+          // setLocation(user.msg.location);
+          // setView("userInfo");
+          setView("events");
       });
       }
     });
@@ -329,6 +331,10 @@ function CreateProfile() {
               Location: {location}
             </h4>
           </div>
+      )}
+
+      {(view=="events") && (
+        <Events/>
       )}
       
     </div>
