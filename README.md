@@ -2,10 +2,10 @@
 *Goal: Creating a Profile & Logging In*
  
 ## UI
-- [ ] sign up or login
-- [ ] event organizer (disabled) or user
-- [ ] email & confirm email
-- [ ] username & password
+- [x ] sign up or login
+- [x ] event organizer (disabled) or user
+- [x ] email & confirm email
+- [x ] username & password
 - [ ] selecting interests
 - [ ] location, school, age, transpo
 - [ ] once the user SAVES they can view events and communities

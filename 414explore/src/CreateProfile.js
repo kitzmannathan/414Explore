@@ -1,18 +1,21 @@
 import './CreateProfile.css';
 import { useState } from 'react';
 import emailjs from 'emailjs-com';
-import keysFile from "./keys.json"
+// import keysFile from "./keys.json"
 import rsa from "./RSAEncryption";
+// var url = new URL("http://localhost:3001/create-User?userName=test&password="+rsa.encrypt("test", keys) + "&email=test@email.com&userType=user");
 
 
-let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)]
+// let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)]
 function CreateProfile() {
 
   const [view, setView] = useState("first");
   const [verificationCode, setVerificationCode] = useState(0);
+  const [userEmail, setUserEmail] = useState("");
   const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+  const [signinTries, setSigninTries] = useState(6);
   
   const [password, setPassword] = useState("");
   
@@ -27,7 +30,9 @@ function CreateProfile() {
     console.log(num);
     // emailjs.send('service_r6rrkdo', 'template_ygla1qm', address, 'HEDXSuwTR5Q-cpA8e')
     // .then((result) => {
+      setUserEmail(e.target.reply_to.value);
       setView("confirmation");
+
     // }, (error) => {
     //   console.log(error.text);
     // });
@@ -49,8 +54,10 @@ function CreateProfile() {
         if(e.target.password.value === e.target.pass2.value){
           setUsername(e.target.username.value);
           setPassword(e.target.pass.value);
-          console.log("username: ", username);
-          console.log("password: ", password);
+          setView("userInfo");
+          // url.set("userName", `${e.target.username.value}`);
+          // url.set("password", `${e.target.pass.value}`);
+          // url.set("email", `${userEmail}`);
         } else{
           window.alert("Passwords do not match");
         }
@@ -60,33 +67,48 @@ function CreateProfile() {
     } else{
       window.alert("Username does not follow the correct format");
     }
+  }
+
+  const signInUser =(e)=> {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    if(signinTries === 0){
+      window.alert("You have reached you sign in attempt limit, please try again later");
+      e.target.signinButton.disabled = true;
+    }
+    if(email !== "davisbr@msoe.edu" || password !== "adminEnter23"){
+      window.alert("Email or password incorrect");
+      console.log(signinTries);
+      setSigninTries(signinTries-1);
+    }
 
   }
 
-    fetch("http://localhost:3001/login?userName=what&password="+rsa.encrypt("huh", keys), {
-        headers: {
-            'Authorization':rsa.encrypt("414ExploreAdmin!", keys)
-        }});
-    fetch("http://localhost:3001/create-User?userName=test&password="+rsa.encrypt("test", keys) + "&email=test@email.com&userType=user", {
-        headers: {
-            "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
-        }
-    })
-    fetch("http://localhost:3001/get-Events", {
-        headers: {
-            "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
-        }
-    })
-    fetch("http://localhost:3001/get-Communities", {
-        headers: {
-            "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
-        }
-    })
-    fetch("http://localhost:3001/get-User?userName=what", {
-        headers: {
-            "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
-        }
-    })
+    // fetch("http://localhost:3001/login?userName=what&password="+rsa.encrypt("huh", keys), {
+    //     headers: {
+    //         'Authorization':rsa.encrypt("414ExploreAdmin!", keys)
+    //     }});
+    // fetch("http://localhost:3001/create-User?userName=test&password="+rsa.encrypt("test", keys) + "&email=test@email.com&userType=user", {
+    //     headers: {
+    //         "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+    //     }
+    // })
+    // fetch("http://localhost:3001/get-Events", {
+    //     headers: {
+    //         "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+    //     }
+    // })
+    // fetch("http://localhost:3001/get-Communities", {
+    //     headers: {
+    //         "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+    //     }
+    // })
+    // fetch("http://localhost:3001/get-User?userName=what", {
+    //     headers: {
+    //         "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+    //     }
+    // })
   return (
     <div className="App">
       {view==="first"&&(
@@ -94,7 +116,7 @@ function CreateProfile() {
         <h1>414Explore</h1>
         <h4>Discover all the Milwaukee has to offer.</h4>
         <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
-        <button className='bottomButton' onClick={() => setView("signIn")} disabled>Sign In</button>
+        <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
       </div>
       )}
       {view==="create" &&(
@@ -109,23 +131,23 @@ function CreateProfile() {
       {view==="userEmail" &&(
         <div className='loginModal'>
           <h3 id="userTypes">Please enter your email</h3>
-          <form onSubmit={sendEmail}>
+          <form onSubmit={sendEmail} className='upInput'>
           <label>
             Email:
           </label>
           <input type='email' name='reply_to'/>
-          <input id='sendConfirmation' type='submit' value="Send"/>
+          <input id='sendConfirmation' type='submit' value="Send" className='topButton'/>
           </form>
         </div>
       )}
       {view==="confirmation"&&(
         <div className='loginModal'>
-          <form onSubmit={confirmCode}>
+          <form onSubmit={confirmCode} className='upInput'>
           <label>
             Confirmation Code:
           </label>
           <input type='number' name='code'/>
-          <input id='confirmEmail' type='submit' value="Confirm email"/>
+          <input id='confirmEmail' type='submit' value="Confirm email" className='topButton'/>
           </form>
       </div>
       )}
@@ -164,6 +186,21 @@ function CreateProfile() {
 
           </form>
       </div>
+      )}
+      {(view==="signIn") &&(
+        <div className='loginModal'>
+          <form onSubmit={signInUser}>
+            <label>
+              Email:
+            </label>
+            <input type='email' name='email' className='upInput'/>
+            <label>
+              Password:
+            </label>
+            <input type='password' name='password' className='upInput'/>
+            <input id='signin' type='submit' value="Sign In" name='signinButton' className='topButton'/>
+          </form>
+        </div>
       )}
       
     </div>
