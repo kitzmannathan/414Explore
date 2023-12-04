@@ -18,7 +18,6 @@ module.exports = {
             upper = ((prime1 - 1n) * (prime2 - 1n)) / (greatestCommonDivisor(prime1 - 1n, prime2 - 1n))
         }
         let d = modInverse(e, upper)
-        console.log(d)
         return [e, d, n]
     },
 

@@ -34,14 +34,14 @@ function CreateProfile() {
       code: num
     }
     console.log(num);
-    // emailjs.send('service_r6rrkdo', 'template_ygla1qm', address, 'HEDXSuwTR5Q-cpA8e')
-    // .then((result) => {
+    emailjs.send('service_r6rrkdo', 'template_ygla1qm', address, 'HEDXSuwTR5Q-cpA8e')
+    .then((result) => {
       setUserEmail(e.target.reply_to.value);
       setView("confirmation");
 
-    // }, (error) => {
-    //   console.log(error.text);
-    // });
+    }, (error) => {
+      console.log(error.text);
+    });
     }
   const confirmCode = (e) => {
     e.preventDefault();
@@ -242,9 +242,9 @@ function CreateProfile() {
             <label>
               Intrests:
             </label>
-            <p className='instructions'>Enter your interests as a coma seperated list valid intrests are {validInterests.map(item =>{
+            <p className='instructions'>Enter your interests as a coma seperated list valid intrests are <strong>{validInterests.map(item =>{
               return item + " "
-            })}</p>
+            })}</strong></p>
             <input type='text' name='intrests' className='upInput'/>
             <label>
               Age:
@@ -254,12 +254,12 @@ function CreateProfile() {
             <label>
               School:
             </label>
-            <p className='instructions'>Enter your Code</p>
+            <p className='instructions'>Enter your Code (MSOE, MIAD, UWM, MU)</p>
             <input type='text' name='school' className='upInput'/>
             <label>
               Location:
             </label>
-            <p className='instructions'>Enter your location</p>
+            <p className='instructions'>Enter your location (Downtown, Historic Third Ward, Yankee Hill, etc)</p>
             <input type='text' name='location' className='upInput'/>
             <label>
               Username:

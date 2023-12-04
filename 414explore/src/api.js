@@ -174,7 +174,6 @@ app.get('/get-User', function(req, res, next) {
 })
 
 app.get('/login', function(req, res, next) {
-    console.log(rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]))
     //if authorization was passed as a header and it is the correct password then try to return the user info
     if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
         let email = req.query.email;
@@ -197,8 +196,6 @@ app.get('/login', function(req, res, next) {
                 }
             });
             if (found) {
-                console.log(rsa.decrypt(password, [keys[1], keys[2]]))
-                console.log(foundUser.password)
                 if(rsa.decrypt(password, [keys[1], keys[2]]) === foundUser.password){
                     success = "succeeded"
                     res.status(200).send({
