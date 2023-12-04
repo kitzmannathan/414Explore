@@ -77,7 +77,6 @@ app.get('/create-User', function(req, res, next) {
                     }
                     //push the new user in to the users
                     users.push(newUser);
-                    ""
                     fs.writeFileSync("./src/Users.json", JSON.stringify(users), "utf-8");
                     res.status(200).send({
                         "status": "success",
@@ -175,6 +174,7 @@ app.get('/get-User', function(req, res, next) {
 })
 
 app.get('/login', function(req, res, next) {
+    console.log(rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]))
     //if authorization was passed as a header and it is the correct password then try to return the user info
     if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
         let email = req.query.email;
@@ -186,7 +186,9 @@ app.get('/login', function(req, res, next) {
                 "msg": "Username or password not defined"
             });
         } else {
+            let currentLogins = fs.readFileSync("./src/logins.txt", "utf-8");
             let found = false;
+            let success = "";
             let foundUser = {};
             users.forEach(user => {
                 if (user.email === email) {
@@ -198,18 +200,23 @@ app.get('/login', function(req, res, next) {
                 console.log(rsa.decrypt(password, [keys[1], keys[2]]))
                 console.log(foundUser.password)
                 if(rsa.decrypt(password, [keys[1], keys[2]]) === foundUser.password){
+                    success = "succeeded"
                     res.status(200).send({
                         "status": "success",
                         "msg": "Valid username and password"
                     });
                 }
                 else{
+                    success = "failed";
                     res.status(400).send({
                         "status": "fail",
                         "msg": "Username and password do not match"
                     });
                 }
-            } else {
+                currentLogins += "Login attempt " + success +" email " + email + " On " + new Date(Date.now()).toUTCString() + "\n";
+                fs.writeFileSync("./src/logins.txt", currentLogins, "utf-8");
+            }
+            else {
                 res.status(400).send({
                     "status": "fail",
                     "msg": "User Not found"
