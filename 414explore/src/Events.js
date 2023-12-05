@@ -101,9 +101,6 @@ const Events = ({email}) => {
 
     return (
         <div>
-            {(page==="communities") && (
-                <Communities/>
-            )}
             <div className="events-header">
                 <header class="d-flex flex-wrap py-3 mb-4 border-bottom">
                     <h1>414Explore</h1>
@@ -114,13 +111,16 @@ const Events = ({email}) => {
                     </ul>
                 </header>
             </div>
-            {(page !== "communities" && page !== "profile") &&
+            {(page==="communities") && (
+                <Communities email={email}/>
+            )}
+            {(page === "events") &&
                 <div className="events-body">
                     <nav className="navbar navbar-light bg-light">
                         <div class="container-fluid">
                             <form className="form-inline">
                                 <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                                <button className="btn btn-outline-success" type="submit">Search</button>
+                                <button className="btn btn-outline-success" disabled={true}>Search</button>
                             </form>
                         </div>
 
