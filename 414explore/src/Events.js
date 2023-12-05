@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Events.css';
-import keysFile from "./keys.json"
+import Communities from './Communities.js';
+import keysFile from "./keys.json";
 import rsa from "./RSAEncryption";
 
 let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)];
@@ -9,6 +10,7 @@ const Events = () => {
     const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [page, setPage] = useState('events');
 
     useEffect(() => {
         fetch('http://localhost:3001/get-Events', {
@@ -37,6 +39,18 @@ const Events = () => {
         setFilteredEvents(filtered);
     }, [selectedTags, events]);
 
+    const handleCommunitiesClick = () => {
+        setPage('communities');
+    };
+
+    const handleEventsClick = () => {
+        setPage('events');
+    };
+
+    const handleProfileClick = () => {
+        setPage('profile');
+    };
+
     const handleTagClick = (tag) => {
         if (selectedTags.includes(tag)) {
             setSelectedTags(selectedTags.filter(t => t !== tag));
@@ -53,22 +67,34 @@ const Events = () => {
         return Array.from(allTags);
     };
 
+    const formatDate = (datesArray) => {
+        return datesArray.map(date => {
+          const month = date.month;
+          const year = date.year;
+          const dayList = date.days.join(', ');
+          return `${month} ${dayList} ${year}`;
+        }).join('; ');
+    };
+
     return (
         <div>
+            {(page=="communities") && (
+                <Communities/>
+            )}
             <div className="events-header">
                 <header class="d-flex flex-wrap py-3 mb-4 border-bottom">
                     <h1>414Explore</h1>
                     <ul class="nav nav-pills">
-                        <li class="nav-item"><button>Communities</button></li>
-                        <li class="nav-item"><button>Favorites</button></li>
-                        <li class="nav-item"><button>Profile</button></li>
+                        <li class="nav-item"><button onClick={handleEventsClick}>Events</button></li>
+                        <li className="nav-item"><button onClick={handleCommunitiesClick}>Communities</button></li>
+                        <li class="nav-item"><button onClick={handleProfileClick}>Profile</button></li>
                     </ul>
                 </header>
             </div>
             <div className="events-body">
                 <nav className="navbar navbar-light bg-light">
                     <div class="container-fluid">
-                        <form className="d-flex">
+                        <form className="form-inline">
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                             <button className="btn btn-outline-success" type="submit">Search</button>
                         </form>
@@ -88,7 +114,7 @@ const Events = () => {
                         <div class="card" key={index}>
                             <div class="card-body">
                                 <h5 class="card-title">{event.name}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{event.dates.month} {event.dates.days} {event.dates.year}</h6>
+                                <h6 className="card-subtitle mb-2 text-muted">{formatDate(event.dates)}</h6>
                                 <p class="card-text">{event.description}</p>
                                 <ul>
                                     {event.tags.map(tag => (

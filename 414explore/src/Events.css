@@ -7,9 +7,9 @@ h1 {
     color: white !important; 
 }
 
-.navbar {
-    justify-content: space-between;
-    display:inline-block !important;
+.navbar .container-fluid {
+    display:flex!important;
+    align-items: center;
 }
 
 ul.nav {
