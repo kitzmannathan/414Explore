@@ -196,149 +196,149 @@ function CreateProfile() {
     //     }
     // })
   return (
-      <div>
-    <div className="App">
-      {view==="first"&&(
-      <div className='loginModal'>
-        <h1>414Explore</h1>
-        <h4>Discover all the Milwaukee has to offer.</h4>
-        <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
-        <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
-      </div>
+    <div>
+      {(view=="events") && (
+          <Events/>
       )}
-      {view==="create" &&(
-        <div className='loginModal'>
-          <div id="defineUser">
-            <h3 id="userTypes">Are you an event attendee or and event organizer?</h3>
-            <button className='topButton' onClick={() => setView("userEmail")}>I'm an Attendee</button>
-            <button className='bottomButton' onClick={() => setView("eoEmail")} disabled>I'm an Event Organizer</button>
+      <div className="App">
+        {view==="first"&&(
+          <div className='loginModal'>
+            <h1>414Explore</h1>
+            <h4>Discover all the Milwaukee has to offer.</h4>
+            <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
+            <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
           </div>
-        </div>
-      )}
-      {view==="userEmail" &&(
-        <div className='loginModal'>
-          <h3 id="userTypes">Please enter your email</h3>
-          <form onSubmit={sendEmail} className='upInput'>
-          <label>
-            Email:
-          </label>
-          <input type='email' name='reply_to'/>
-          <input id='sendConfirmation' type='submit' value="Send" className='topButton'/>
-          </form>
-        </div>
-      )}
-      {view==="confirmation"&&(
-        <div className='loginModal'>
-          <form onSubmit={confirmCode} className='upInput'>
-          <label>
-            Confirmation Code:
-          </label>
-          <input type='number' name='code'/>
-          <input id='confirmEmail' type='submit' value="Confirm email" className='topButton'/>
-          </form>
-      </div>
-      )}
-      {view==="unPW" &&(
-        <div className='loginModal'>
-
-          <form onSubmit={validateInformation} id="unPW">
-            <label>
-              Intrests:
-            </label>
-            <p className='instructions'>Enter your interests as a coma seperated list valid intrests are {validInterests.map(item =>{
-              return item + " "
-            })}</p>
-            <input type='text' name='intrests' className='upInput'/>
-            <label>
-              Age:
-            </label>
-            <p className='instructions'>Enter your age</p>
-            <input type='text' name='age' className='upInput'/>
-            <label>
-              School:
-            </label>
-            <p className='instructions'>Enter your Code</p>
-            <input type='text' name='school' className='upInput'/>
-            <label>
-              Location:
-            </label>
-            <p className='instructions'>Enter your location</p>
-            <input type='text' name='location' className='upInput'/>
-            <label>
-              Username:
-            </label>
-           <p className='instructions'>Your username can contain letters, numbers, underscores and periods.</p>
-            <input type='text' name='username' value={username} onChange={(e) => setUsername(e.target.value)} className='upInput'/>
-
-
-            <label>
-              Password:
-            </label>
-            <p className='instructions'>Password must be at least 6 characters with at least one capital letter and one number.</p>
-            <input type={showPassword ? "text" : "password"} name='pass'/>
-            <div className='showPass'>
-              <label>Show Password</label>
-                <input type="checkbox" value={showPassword} onChange={() => setShowPassword((prev) => !prev)}/>
+        )}
+        {view==="create" &&(
+          <div className='loginModal'>
+            <div id="defineUser">
+              <h3 id="userTypes">Are you an event attendee or and event organizer?</h3>
+              <button className='topButton' onClick={() => setView("userEmail")}>I'm an Attendee</button>
+              <button className='bottomButton' onClick={() => setView("eoEmail")} disabled>I'm an Event Organizer</button>
             </div>
-
-
-            <label>
-              Confirm password:
-            </label>
-            <input type={showPassword2 ? "text" : "password"} name='pass2'/>
-            <div className='showPass'>
-              <label>Show Password</label>
-                <input type="checkbox" value={showPassword2} onChange={() =>setShowPassword2((prev) => !prev)}/>
-            </div>
-            <input id='continue' type='submit' value="Continue" name="continue"/>
-
-          </form>
-      </div>
-      )}
-      {(view==="signIn") &&(
-        <div className='loginModal'>
-          <form onSubmit={signInUser}>
+          </div>
+        )}
+        {view==="userEmail" &&(
+          <div className='loginModal'>
+            <h3 id="userTypes">Please enter your email</h3>
+            <form onSubmit={sendEmail} className='upInput'>
             <label>
               Email:
             </label>
-            <input type='email' name='email' className='upInput'/>
-            <label>
-              Password:
-            </label>
-            <input type='password' name='password' className='upInput'/>
-            <input id='signin' type='submit' value="Sign In" name='signinButton' className='topButton'/>
-          </form>
-        </div>
-      )}
-
-      {(view==="userInfo") &&(
-          <div>
-            <h4>
-              User name: {username}
-            </h4>
-            <h4>
-              Email: {userEmail}
-            </h4>
-            <h4>
-              Age: {age}
-            </h4>
-            <h4>
-              Interests: {interests}
-            </h4>
-            <h4>
-              School: {school}
-            </h4>
-            <h4>
-              Location: {location}
-            </h4>
+            <input type='email' name='reply_to'/>
+            <input id='sendConfirmation' type='submit' value="Send" className='topButton'/>
+            </form>
           </div>
-      )}
+        )}
+        {view==="confirmation"&&(
+          <div className='loginModal'>
+            <form onSubmit={confirmCode} className='upInput'>
+            <label>
+              Confirmation Code:
+            </label>
+            <input type='number' name='code'/>
+            <input id='confirmEmail' type='submit' value="Confirm email" className='topButton'/>
+            </form>
+        </div>
+        )}
+        {view==="unPW" &&(
+          <div className='loginModal'>
+
+            <form onSubmit={validateInformation} id="unPW">
+              <label>
+                Intrests:
+              </label>
+              <p className='instructions'>Enter your interests as a coma seperated list valid intrests are {validInterests.map(item =>{
+                return item + " "
+              })}</p>
+              <input type='text' name='intrests' className='upInput'/>
+              <label>
+                Age:
+              </label>
+              <p className='instructions'>Enter your age</p>
+              <input type='text' name='age' className='upInput'/>
+              <label>
+                School:
+              </label>
+              <p className='instructions'>Enter your Code</p>
+              <input type='text' name='school' className='upInput'/>
+              <label>
+                Location:
+              </label>
+              <p className='instructions'>Enter your location</p>
+              <input type='text' name='location' className='upInput'/>
+              <label>
+                Username:
+              </label>
+            <p className='instructions'>Your username can contain letters, numbers, underscores and periods.</p>
+              <input type='text' name='username' value={username} onChange={(e) => setUsername(e.target.value)} className='upInput'/>
+
+
+              <label>
+                Password:
+              </label>
+              <p className='instructions'>Password must be at least 6 characters with at least one capital letter and one number.</p>
+              <input type={showPassword ? "text" : "password"} name='pass'/>
+              <div className='showPass'>
+                <label>Show Password</label>
+                  <input type="checkbox" value={showPassword} onChange={() => setShowPassword((prev) => !prev)}/>
+              </div>
+
+
+              <label>
+                Confirm password:
+              </label>
+              <input type={showPassword2 ? "text" : "password"} name='pass2'/>
+              <div className='showPass'>
+                <label>Show Password</label>
+                  <input type="checkbox" value={showPassword2} onChange={() =>setShowPassword2((prev) => !prev)}/>
+              </div>
+              <input id='continue' type='submit' value="Continue" name="continue"/>
+
+            </form>
+        </div>
+        )}
+        {(view==="signIn") &&(
+          <div className='loginModal'>
+            <form onSubmit={signInUser}>
+              <label>
+                Email:
+              </label>
+              <input type='email' name='email' className='upInput'/>
+              <label>
+                Password:
+              </label>
+              <input type='password' name='password' className='upInput'/>
+              <input id='signin' type='submit' value="Sign In" name='signinButton' className='topButton'/>
+            </form>
+          </div>
+        )}
+
+        {(view==="userInfo") &&(
+            <div>
+              <h4>
+                User name: {username}
+              </h4>
+              <h4>
+                Email: {userEmail}
+              </h4>
+              <h4>
+                Age: {age}
+              </h4>
+              <h4>
+                Interests: {interests}
+              </h4>
+              <h4>
+                School: {school}
+              </h4>
+              <h4>
+                Location: {location}
+              </h4>
+            </div>
+        )}
+      </div>
     </div>
-      {(view=="events") && (
-        <Events/>
-      )}
-      
-    </div>
+    
   );
 }
 // https://stackoverflow.com/questions/55795125/how-to-send-email-from-my-react-web-application

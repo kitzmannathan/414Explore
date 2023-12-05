@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Events.css';
-import rsa from "./RSAEncryption";
 import keysFile from "./keys.json"
-let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)]
+import rsa from "./RSAEncryption";
 
+let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)];
 
 const Events = () => {
     const [events, setEvents] = useState([]);
@@ -15,14 +15,13 @@ const Events = () => {
             headers: {
                 "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
             }
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                const flattenedEvents = data.msg[0].organizers.flatMap(org => org.events);
-                setEvents(flattenedEvents);
-                setFilteredEvents(flattenedEvents);
-            });
+        }).then(response => response.json())
+        .then(data => {
+            console.log(data)
+            const flattenedEvents = data.msg[0].organizers.flatMap(org => org.events);
+            setEvents(flattenedEvents);
+            setFilteredEvents(flattenedEvents);
+        });
     }, []);
 
     useEffect(() => {
@@ -55,22 +54,21 @@ const Events = () => {
     };
 
     return (
-        <div>
+        <div className="events-body">
             <nav className="navbar navbar-light bg-light">
-                <form>
-                    <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <form className="input-group">
+                    <input className="form-control rounded" type="search" placeholder="Search" aria-label="Search"/>
+                    <button className="btn btn-outline-success" type="submit">Search</button>
                 </form>
 
                 Filters:
-                <div class="btn-group" role="group">
+                <div className="btn-group" role="group">
                     {
                         getAllTags().map((tag) => (
-                            <button type="button" class="btn btn-outline-primary">{tag}</button>
+                            <button type="button" className="btn btn-outline-primary">{tag}</button>
                         )
                     )}
                 </div>
-                
             </nav>
         </div>
     );
