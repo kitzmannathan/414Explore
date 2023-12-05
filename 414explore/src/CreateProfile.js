@@ -148,25 +148,8 @@ function CreateProfile() {
         setSigninTries(signinTries-1);
       }
       else{
-        fetch("http://localhost:3001/get-User?email="+email, {
-          headers: {
-            'Authorization':rsa.encrypt("414ExploreAdmin!", keys)
-          }}).then(response2 => {
-          return response2.json();
-        }).then(user => {
-          let interests = "";
-          user.msg.intrests.forEach(item =>{
-            interests += item +" ";
-          })
-          // setUsername(user.msg.userName);
-          // setUserEmail(user.msg.email);
-          // setInterests(interests);
-          // setSchool(user.msg.school);
-          // setAge(user.msg.age);
-          // setLocation(user.msg.location);
-          // setView("userInfo");
-          setView("events");
-      });
+        setUserEmail(email);
+        setView("events")
       }
     });
   }
@@ -198,7 +181,7 @@ function CreateProfile() {
   return (
     <div>
       {(view=="events") && (
-          <Events/>
+          <Events email={userEmail}/>
       )}
       <div className="App">
         {view==="first"&&(
@@ -208,7 +191,6 @@ function CreateProfile() {
             <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
             <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
           </div>
-        </div>
       )}
       {view==="userEmail" &&(
         <div className='loginModal'>
@@ -338,29 +320,6 @@ function CreateProfile() {
               <input id='signin' type='submit' value="Sign In" name='signinButton' className='topButton'/>
             </form>
           </div>
-        )}
-
-        {(view==="userInfo") &&(
-            <div>
-              <h4>
-                User name: {username}
-              </h4>
-              <h4>
-                Email: {userEmail}
-              </h4>
-              <h4>
-                Age: {age}
-              </h4>
-              <h4>
-                Interests: {interests}
-              </h4>
-              <h4>
-                School: {school}
-              </h4>
-              <h4>
-                Location: {location}
-              </h4>
-            </div>
         )}
       </div>
     </div>

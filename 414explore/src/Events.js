@@ -6,11 +6,17 @@ import rsa from "./RSAEncryption";
 
 let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)];
 
-const Events = () => {
+const Events = ({email}) => {
     const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [page, setPage] = useState('events');
+    const [userEmail, setUserEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [interests, setInterests] = useState("");
+    const [age, setAge] = useState("");
+    const [school, setSchool] = useState("");
+    const [location, setLocation] = useState("");
 
     useEffect(() => {
         fetch('http://localhost:3001/get-Events', {
@@ -48,6 +54,23 @@ const Events = () => {
     };
 
     const handleProfileClick = () => {
+        fetch("http://localhost:3001/get-User?email="+email, {
+            headers: {
+                'Authorization':rsa.encrypt("414ExploreAdmin!", keys)
+            }}).then(response2 => {
+            return response2.json();
+        }).then(user => {
+            let interests = "";
+            user.msg.intrests.forEach(item =>{
+                interests += item +" ";
+            })
+            setUsername(user.msg.userName);
+            setUserEmail(user.msg.email);
+            setInterests(interests);
+            setSchool(user.msg.school);
+            setAge(user.msg.age);
+            setLocation(user.msg.location);
+        });
         setPage('profile');
     };
 
@@ -78,7 +101,7 @@ const Events = () => {
 
     return (
         <div>
-            {(page=="communities") && (
+            {(page==="communities") && (
                 <Communities/>
             )}
             <div className="events-header">
@@ -91,41 +114,65 @@ const Events = () => {
                     </ul>
                 </header>
             </div>
-            <div className="events-body">
-                <nav className="navbar navbar-light bg-light">
-                    <div class="container-fluid">
-                        <form className="form-inline">
-                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                            <button className="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-                    </div>
-
-                    <h5>Filters:</h5>
-                    <ul class="nav nav-tabs">
-                        {
-                            getAllTags().map((tag) => (
-                                <li role="presentation"><button type="button" className="btn btn-outline-primary">{tag}</button></li>
-                            )
-                        )}
-                    </ul>
-                </nav>
-                <div className="event-cards">
-                    {filteredEvents.map((event, index) => (
-                        <div class="card" key={index}>
-                            <div class="card-body">
-                                <h5 class="card-title">{event.name}</h5>
-                                <h6 className="card-subtitle mb-2 text-muted">{formatDate(event.dates)}</h6>
-                                <p class="card-text">{event.description}</p>
-                                <ul>
-                                    {event.tags.map(tag => (
-                                        <li>{tag}</li>
-                                    ))}
-                                </ul>
-                            </div>
+            {(page !== "communities" && page !== "profile") &&
+                <div className="events-body">
+                    <nav className="navbar navbar-light bg-light">
+                        <div class="container-fluid">
+                            <form className="form-inline">
+                                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                                <button className="btn btn-outline-success" type="submit">Search</button>
+                            </form>
                         </div>
-                    ))}
+
+                        <h5>Filters:</h5>
+                        <ul class="nav nav-tabs">
+                            {
+                                getAllTags().map((tag) => (
+                                    <li role="presentation"><button type="button" className="btn btn-outline-primary">{tag}</button></li>
+                                )
+                            )}
+                        </ul>
+                    </nav>
+                    <div className="event-cards">
+                        {filteredEvents.map((event, index) => (
+                            <div class="card" key={index}>
+                                <div class="card-body">
+                                    <h5 class="card-title">{event.name}</h5>
+                                    <h6 className="card-subtitle mb-2 text-muted">{formatDate(event.dates)}</h6>
+                                    <p class="card-text">{event.description}</p>
+                                    <ul>
+                                        {event.tags.map(tag => (
+                                            <li>{tag}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            }
+            {(page==="profile") &&(
+                <div>
+                    <h4>
+                        User name: {username}
+                    </h4>
+                    <h4>
+                        Email: {userEmail}
+                    </h4>
+                    <h4>
+                        Age: {age}
+                    </h4>
+                    <h4>
+                        Interests: {interests}
+                    </h4>
+                    <h4>
+                        School: {school}
+                    </h4>
+                    <h4>
+                        Location: {location}
+                    </h4>
+                </div>
+            )}
         </div>
     );
 };
