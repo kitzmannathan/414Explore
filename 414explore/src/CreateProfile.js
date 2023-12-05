@@ -34,6 +34,7 @@ function CreateProfile() {
       reply_to: e.target.reply_to.value,
       code: num
     }
+    alert(num);
     emailjs.send('service_r6rrkdo', 'template_ygla1qm', address, 'HEDXSuwTR5Q-cpA8e')
         .then((result) => {
           setUserEmail(e.target.reply_to.value);
