@@ -55,10 +55,10 @@ const Events = () => {
 
     return (
         <div>
-            <div>
-                <header class="d-flex flex-wrap justify-content-left py-3 mb-4 border-bottom">
+            <div className="events-header">
+                <header class="d-flex flex-wrap py-3 mb-4 border-bottom">
                     <h1>414Explore</h1>
-                    <ul class="nav nav-pills justify-content-right">
+                    <ul class="nav nav-pills">
                         <li class="nav-item"><button>Communities</button></li>
                         <li class="nav-item"><button>Favorites</button></li>
                         <li class="nav-item"><button>Profile</button></li>
@@ -67,27 +67,38 @@ const Events = () => {
             </div>
             <div className="events-body">
                 <nav className="navbar navbar-light bg-light">
-                    <form className="input-group">
-                        <input className="form-control rounded" type="search" placeholder="Search" aria-label="Search"/>
-                        <button className="btn btn-outline-success" type="submit">Search</button>
-                    </form>
+                    <div class="container-fluid">
+                        <form className="d-flex">
+                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                            <button className="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </div>
 
-                    Filters:
-                    {/* <div className="btn-group" role="group">
+                    <h5>Filters:</h5>
+                    <ul class="nav nav-tabs">
                         {
                             getAllTags().map((tag) => (
-                                <button type="button" className="btn btn-outline-primary">{tag}</button>
+                                <li role="presentation"><button type="button" className="btn btn-outline-primary">{tag}</button></li>
                             )
                         )}
-                    </div> */}
-                <ul class="nav nav-tabs">
-                    {
-                        getAllTags().map((tag) => (
-                            <li role="presentation"><button type="button" className="btn btn-outline-primary">{tag}</button></li>
-                        )
-                    )}
-                </ul>
+                    </ul>
                 </nav>
+                <div className="event-cards">
+                    {filteredEvents.map((event, index) => (
+                        <div class="card" key={index}>
+                            <div class="card-body">
+                                <h5 class="card-title">{event.name}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{event.dates.month} {event.dates.days} {event.dates.year}</h6>
+                                <p class="card-text">{event.description}</p>
+                                <ul>
+                                    {event.tags.map(tag => (
+                                        <li>{tag}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
