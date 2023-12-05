@@ -54,22 +54,41 @@ const Events = () => {
     };
 
     return (
-        <div className="events-body">
-            <nav className="navbar navbar-light bg-light">
-                <form className="input-group">
-                    <input className="form-control rounded" type="search" placeholder="Search" aria-label="Search"/>
-                    <button className="btn btn-outline-success" type="submit">Search</button>
-                </form>
+        <div>
+            <div>
+                <header class="d-flex flex-wrap justify-content-left py-3 mb-4 border-bottom">
+                    <h1>414Explore</h1>
+                    <ul class="nav nav-pills justify-content-right">
+                        <li class="nav-item"><button>Communities</button></li>
+                        <li class="nav-item"><button>Favorites</button></li>
+                        <li class="nav-item"><button>Profile</button></li>
+                    </ul>
+                </header>
+            </div>
+            <div className="events-body">
+                <nav className="navbar navbar-light bg-light">
+                    <form className="input-group">
+                        <input className="form-control rounded" type="search" placeholder="Search" aria-label="Search"/>
+                        <button className="btn btn-outline-success" type="submit">Search</button>
+                    </form>
 
-                Filters:
-                <div className="btn-group" role="group">
+                    Filters:
+                    {/* <div className="btn-group" role="group">
+                        {
+                            getAllTags().map((tag) => (
+                                <button type="button" className="btn btn-outline-primary">{tag}</button>
+                            )
+                        )}
+                    </div> */}
+                <ul class="nav nav-tabs">
                     {
                         getAllTags().map((tag) => (
-                            <button type="button" className="btn btn-outline-primary">{tag}</button>
+                            <li role="presentation"><button type="button" className="btn btn-outline-primary">{tag}</button></li>
                         )
                     )}
-                </div>
-            </nav>
+                </ul>
+                </nav>
+            </div>
         </div>
     );
 };
