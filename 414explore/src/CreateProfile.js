@@ -208,7 +208,6 @@ function CreateProfile() {
             <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
             <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
           </div>
-        </div>
       )}
       {view==="userEmail" &&(
         <div className='loginModal'>
