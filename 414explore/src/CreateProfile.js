@@ -3,6 +3,7 @@ import { useState } from 'react';
 import emailjs from 'emailjs-com';
 import keysFile from "./keys.json"
 import rsa from "./RSAEncryption";
+import Events from './Events';
 // var url = new URL("http://localhost:3001/create-User?userName=test&password="+rsa.encrypt("test", keys) + "&email=test@email.com&userType=user");
 
 
@@ -157,13 +158,14 @@ function CreateProfile() {
           user.msg.intrests.forEach(item =>{
             interests += item +" ";
           })
-          setUsername(user.msg.userName);
-          setUserEmail(user.msg.email);
-          setInterests(interests);
-          setSchool(user.msg.school);
-          setAge(user.msg.age);
-          setLocation(user.msg.location);
-          setView("userInfo");
+          // setUsername(user.msg.userName);
+          // setUserEmail(user.msg.email);
+          // setInterests(interests);
+          // setSchool(user.msg.school);
+          // setAge(user.msg.age);
+          // setLocation(user.msg.location);
+          // setView("userInfo");
+          setView("events");
       });
       }
     });
@@ -194,21 +196,17 @@ function CreateProfile() {
     //     }
     // })
   return (
-    <div className="App">
-      {view==="first"&&(
-      <div className='loginModal'>
-        <h1>414Explore</h1>
-        <h4>Discover all the Milwaukee has to offer.</h4>
-        <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
-        <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
-      </div>
+    <div>
+      {(view=="events") && (
+          <Events/>
       )}
-      {view==="create" &&(
-        <div className='loginModal'>
-          <div id="defineUser">
-            <h3 id="userTypes">Are you an event attendee or and event organizer?</h3>
-            <button className='topButton' onClick={() => setView("userEmail")}>I'm an Attendee</button>
-            <button className='bottomButton' onClick={() => setView("eoEmail")} disabled>I'm an Event Organizer</button>
+      <div className="App">
+        {view==="first"&&(
+          <div className='loginModal'>
+            <h1>414Explore</h1>
+            <h4>Discover all the Milwaukee has to offer.</h4>
+            <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
+            <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
           </div>
         </div>
       )}
@@ -257,81 +255,116 @@ function CreateProfile() {
             <p className='instructions'>Enter your Code (MSOE, MIAD, UWM, MU)</p>
             <input type='text' name='school' className='upInput'/>
             <label>
-              Location:
+              Email:
             </label>
             <p className='instructions'>Enter your location (Downtown, Historic Third Ward, Yankee Hill, etc)</p>
             <input type='text' name='location' className='upInput'/>
             <label>
-              Username:
+              Confirmation Code:
             </label>
-           <p className='instructions'>Your username can contain letters, numbers, underscores and periods.</p>
-            <input type='text' name='username' value={username} onChange={(e) => setUsername(e.target.value)} className='upInput'/>
-
-
-            <label>
-              Password:
-            </label>
-            <p className='instructions'>Password must be at least 6 characters with at least one capital letter and one number.</p>
-            <input type={showPassword ? "text" : "password"} name='pass'/>
-            <div className='showPass'>
-              <label>Show Password</label>
-                <input type="checkbox" value={showPassword} onChange={() => setShowPassword((prev) => !prev)}/>
-            </div>
-
-
-            <label>
-              Confirm password:
-            </label>
-            <input type={showPassword2 ? "text" : "password"} name='pass2'/>
-            <div className='showPass'>
-              <label>Show Password</label>
-                <input type="checkbox" value={showPassword2} onChange={() =>setShowPassword2((prev) => !prev)}/>
-            </div>
-            <input id='continue' type='submit' value="Continue" name="continue"/>
-
-          </form>
-      </div>
-      )}
-      {(view==="signIn") &&(
-        <div className='loginModal'>
-          <form onSubmit={signInUser}>
-            <label>
-              Email:
-            </label>
-            <input type='email' name='email' className='upInput'/>
-            <label>
-              Password:
-            </label>
-            <input type='password' name='password' className='upInput'/>
-            <input id='signin' type='submit' value="Sign In" name='signinButton' className='topButton'/>
-          </form>
+            <input type='number' name='code'/>
+            <input id='confirmEmail' type='submit' value="Confirm email" className='topButton'/>
+            </form>
         </div>
-      )}
+        )}
+        {view==="unPW" &&(
+          <div className='loginModal'>
 
-      {(view==="userInfo") &&(
-          <div>
-            <h4>
-              User name: {username}
-            </h4>
-            <h4>
-              Email: {userEmail}
-            </h4>
-            <h4>
-              Age: {age}
-            </h4>
-            <h4>
-              Interests: {interests}
-            </h4>
-            <h4>
-              School: {school}
-            </h4>
-            <h4>
-              Location: {location}
-            </h4>
+            <form onSubmit={validateInformation} id="unPW">
+              <label>
+                Intrests:
+              </label>
+              <p className='instructions'>Enter your interests as a coma seperated list valid intrests are {validInterests.map(item =>{
+                return item + " "
+              })}</p>
+              <input type='text' name='intrests' className='upInput'/>
+              <label>
+                Age:
+              </label>
+              <p className='instructions'>Enter your age</p>
+              <input type='text' name='age' className='upInput'/>
+              <label>
+                School:
+              </label>
+              <p className='instructions'>Enter your Code</p>
+              <input type='text' name='school' className='upInput'/>
+              <label>
+                Location:
+              </label>
+              <p className='instructions'>Enter your location</p>
+              <input type='text' name='location' className='upInput'/>
+              <label>
+                Username:
+              </label>
+            <p className='instructions'>Your username can contain letters, numbers, underscores and periods.</p>
+              <input type='text' name='username' value={username} onChange={(e) => setUsername(e.target.value)} className='upInput'/>
+
+
+              <label>
+                Password:
+              </label>
+              <p className='instructions'>Password must be at least 6 characters with at least one capital letter and one number.</p>
+              <input type={showPassword ? "text" : "password"} name='pass'/>
+              <div className='showPass'>
+                <label>Show Password</label>
+                  <input type="checkbox" value={showPassword} onChange={() => setShowPassword((prev) => !prev)}/>
+              </div>
+
+
+              <label>
+                Confirm password:
+              </label>
+              <input type={showPassword2 ? "text" : "password"} name='pass2'/>
+              <div className='showPass'>
+                <label>Show Password</label>
+                  <input type="checkbox" value={showPassword2} onChange={() =>setShowPassword2((prev) => !prev)}/>
+              </div>
+              <input id='continue' type='submit' value="Continue" name="continue"/>
+
+            </form>
+        </div>
+        )}
+        {(view==="signIn") &&(
+          <div className='loginModal'>
+            <form onSubmit={signInUser}>
+              <label>
+                Email:
+              </label>
+              <input type='email' name='email' className='upInput'/>
+              <label>
+                Password:
+              </label>
+              <input type='password' name='password' className='upInput'/>
+              <input id='signin' type='submit' value="Sign In" name='signinButton' className='topButton'/>
+            </form>
           </div>
-      )}
-      
+        )}
+
+        {(view==="userInfo") &&(
+            <div>
+              <h4>
+                User name: {username}
+              </h4>
+              <h4>
+                Email: {userEmail}
+              </h4>
+              <h4>
+                Age: {age}
+              </h4>
+              <h4>
+                Interests: {interests}
+              </h4>
+              <h4>
+                School: {school}
+              </h4>
+              <h4>
+                Location: {location}
+              </h4>
+            </div>
+        )}
+      </div>
     </div>
+    
   );
 }
 // https://stackoverflow.com/questions/55795125/how-to-send-email-from-my-react-web-application

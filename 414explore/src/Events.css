@@ -1,0 +1,23 @@
+.events-header {
+    background-color: rgb(55, 55, 255);
+    justify-content: space-between;
+}
+
+h1 {
+    color: white !important; 
+}
+
+.navbar .container-fluid {
+    display:flex!important;
+    align-items: center;
+}
+
+ul.nav {
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+ul.nav li {
+    display: inline-block;
+    float: none;
+}
