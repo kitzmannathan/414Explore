@@ -35,14 +35,14 @@ function CreateProfile() {
       code: num
     }
     console.log(num);
-    // emailjs.send('service_r6rrkdo', 'template_ygla1qm', address, 'HEDXSuwTR5Q-cpA8e')
-    // .then((result) => {
+    emailjs.send('service_r6rrkdo', 'template_ygla1qm', address, 'HEDXSuwTR5Q-cpA8e')
+    .then((result) => {
       setUserEmail(e.target.reply_to.value);
       setView("confirmation");
 
-    // }, (error) => {
-    //   console.log(error.text);
-    // });
+    }, (error) => {
+      console.log(error.text);
+    });
     }
   const confirmCode = (e) => {
     e.preventDefault();
@@ -208,31 +208,57 @@ function CreateProfile() {
             <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
             <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
           </div>
-        )}
-        {view==="create" &&(
-          <div className='loginModal'>
-            <div id="defineUser">
-              <h3 id="userTypes">Are you an event attendee or and event organizer?</h3>
-              <button className='topButton' onClick={() => setView("userEmail")}>I'm an Attendee</button>
-              <button className='bottomButton' onClick={() => setView("eoEmail")} disabled>I'm an Event Organizer</button>
-            </div>
-          </div>
-        )}
-        {view==="userEmail" &&(
-          <div className='loginModal'>
-            <h3 id="userTypes">Please enter your email</h3>
-            <form onSubmit={sendEmail} className='upInput'>
+        </div>
+      )}
+      {view==="userEmail" &&(
+        <div className='loginModal'>
+          <h3 id="userTypes">Please enter your email</h3>
+          <form onSubmit={sendEmail} className='upInput'>
+          <label>
+            Email:
+          </label>
+          <input type='email' name='reply_to'/>
+          <input id='sendConfirmation' type='submit' value="Send" className='topButton'/>
+          </form>
+        </div>
+      )}
+      {view==="confirmation"&&(
+        <div className='loginModal'>
+          <form onSubmit={confirmCode} className='upInput'>
+          <label>
+            Confirmation Code:
+          </label>
+          <input type='number' name='code'/>
+          <input id='confirmEmail' type='submit' value="Confirm email" className='topButton'/>
+          </form>
+      </div>
+      )}
+      {view==="unPW" &&(
+        <div className='loginModal'>
+
+          <form onSubmit={validateInformation} id="unPW">
+            <label>
+              Intrests:
+            </label>
+            <p className='instructions'>Enter your interests as a coma seperated list valid intrests are <strong>{validInterests.map(item =>{
+              return item + " "
+            })}</strong></p>
+            <input type='text' name='intrests' className='upInput'/>
+            <label>
+              Age:
+            </label>
+            <p className='instructions'>Enter your age</p>
+            <input type='text' name='age' className='upInput'/>
+            <label>
+              School:
+            </label>
+            <p className='instructions'>Enter your Code (MSOE, MIAD, UWM, MU)</p>
+            <input type='text' name='school' className='upInput'/>
             <label>
               Email:
             </label>
-            <input type='email' name='reply_to'/>
-            <input id='sendConfirmation' type='submit' value="Send" className='topButton'/>
-            </form>
-          </div>
-        )}
-        {view==="confirmation"&&(
-          <div className='loginModal'>
-            <form onSubmit={confirmCode} className='upInput'>
+            <p className='instructions'>Enter your location (Downtown, Historic Third Ward, Yankee Hill, etc)</p>
+            <input type='text' name='location' className='upInput'/>
             <label>
               Confirmation Code:
             </label>
