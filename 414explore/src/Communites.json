@@ -2,26 +2,26 @@
   {
     "name": "ShrekFest Goers",
     "numberOfMembers": "125",
-    "tags" : ["food", "music", "festival"]
+    "tags" : ""
   },
   {
     "name": "Marquette Moshers",
     "numberOfMembers": "40",
-    "tags" : ["music", "metal"]
+    "tags" : ""
   },
   {
     "name": "Boat Show Bros",
     "numberOfMembers": "34",
-    "tags" : ["show"]
+    "tags" : ""
   },
   {
     "name": "Monster Jam Maniacs",
     "numberOfMembers": "83",
-    "tags" : ["show"]
+    "tags" : ""
   },
   {
     "name": "Christmas Carolers",
     "numberOfMembers": "26",
-    "tags" : ["music", "theatre"]
+    "tags" : ""
   }
 ]
