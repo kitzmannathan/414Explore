@@ -79,6 +79,15 @@ function CreateProfile({setPage, setEmail}) {
                     if (!validInterests.includes(item.trim())) {
                       valid = false;
                     }
+                    let count = 0;
+                    e.target.intrests.value.split(",").forEach(item2 => {
+                      if(item.trim() === item2.trim()){
+                        count++;
+                      }
+                    });
+                    if(valid) {
+                      valid = (count === 1)
+                    }
                   });
                   if (valid) {
                     interests = "[" + e.target.intrests.value + "]";
@@ -105,6 +114,7 @@ function CreateProfile({setPage, setEmail}) {
                     } else {
                       setEmail(userEmail)
                       setPage("Events");
+                      setView("first");
                     }
                   });
                 }
@@ -151,6 +161,7 @@ function CreateProfile({setPage, setEmail}) {
       else{
         setEmail(email);
         setPage("Events")
+        setView("first");
       }
     });
   }

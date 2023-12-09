@@ -10,6 +10,7 @@ const Events = ({email}) => {
     const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [failed, setFailed] = useState(true);
 
     useEffect(() => {
         fetch('http://localhost:3001/get-Events', {
@@ -18,10 +19,16 @@ const Events = ({email}) => {
             }
         }).then(response => response.json())
         .then(data => {
-            console.log(data)
-            const flattenedEvents = data.msg[0].organizers.flatMap(org => org.events);
-            setEvents(flattenedEvents);
-            setFilteredEvents(flattenedEvents);
+            if(data.status === "fail"){
+                alert(data.msg);
+                setFailed(true);
+            }
+            else {
+                const flattenedEvents = data.msg[0].organizers.flatMap(org => org.events);
+                setEvents(flattenedEvents);
+                setFilteredEvents(flattenedEvents);
+                setFailed(false);
+            }
         });
     }, []);
 
@@ -64,7 +71,7 @@ const Events = ({email}) => {
     };
 
     return (
-        <div>
+        (!failed)&&<div>
             <div className="events-body">
                 <nav className="navbar navbar-light bg-light">
                     <div class="container-fluid">

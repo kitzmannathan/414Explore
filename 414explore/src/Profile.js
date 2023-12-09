@@ -11,6 +11,8 @@ function Profile({email}) {
     const [age, setAge] = useState("");
     const [school, setSchool] = useState("");
     const [location, setLocation] = useState("");
+    const [failed, setFailed] = useState(true);
+
     useEffect(() => {
         fetch("http://localhost:3001/get-User?email="+email, {
             headers: {
@@ -18,28 +20,35 @@ function Profile({email}) {
             }}).then(response2 => {
             return response2.json();
         }).then(user => {
-            let interests = "";
-            user.msg.intrests.forEach((item, i) =>{
-                if(i === user.msg.intrests.length-1){
-                    interests += item;
-                }
-                else {
-                    interests += item + ", ";
-                }
-            })
-            interests.substring(0,(interests.length-1));
-            setUsername(user.msg.userName);
-            setName(user.msg.name);
-            setUserEmail(user.msg.email);
-            setInterests(interests);
-            setSchool(user.msg.school);
-            setAge(user.msg.age);
-            setLocation(user.msg.location);
+            if(user.status === "fail"){
+                alert(user.msg)
+                setFailed(true);
+            }
+            else {
+                let interests = "";
+                user.msg.intrests.forEach((item, i) => {
+                    if (i === user.msg.intrests.length - 1) {
+                        interests += item;
+                    } else {
+                        interests += item + ", ";
+                    }
+                })
+                interests.substring(0, (interests.length - 1));
+                setUsername(user.msg.userName);
+                setName(user.msg.name);
+                setUserEmail(user.msg.email);
+                setInterests(interests);
+                setSchool(user.msg.school);
+                setAge(user.msg.age);
+                setLocation(user.msg.location);
+                setFailed(false);
+            }
         });
+
     }, []);
 
     return (
-        <div>
+        (!failed)&&<div>
             <h4>
                 User name: {username}
             </h4>

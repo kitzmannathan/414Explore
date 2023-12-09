@@ -7,6 +7,7 @@ let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)];
 
 const Communities = () => {
     const [communities, setCommunities] = useState([]);
+    const [failed, setFailed] = useState(true);
 
     useEffect(() => {
         fetch('http://localhost:3001/get-Communities', {
@@ -15,13 +16,19 @@ const Communities = () => {
             }
         }).then(response => response.json())
             .then(data => {
-                console.log(data)
-                setCommunities(data.msg[0]);
+                if(data.status === "fail"){
+                    alert(data.msg)
+                    setFailed(true);
+                }
+                else{
+                    setCommunities(data.msg[0]);
+                    setFailed(false);
+                }
             });
     }, []);
 
     return (
-        <div className="main">
+        (!failed)&&<div className="main">
             <div className="search">
                 <form className="form-inline">
                     <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
