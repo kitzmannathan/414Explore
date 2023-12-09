@@ -86,7 +86,7 @@ app.get('/create-User', function(req, res, next) {
                 else{
                     res.status(400).send({
                         "status": "fail",
-                        "msg": "Profile already exists"
+                        "msg": "User already exists"
                     });
                 }
             }
@@ -160,7 +160,7 @@ app.get('/get-User', function(req, res, next) {
             } else {
                 res.status(400).send({
                     "status": "fail",
-                    "msg": "Profile Not found"
+                    "msg": "User Not found"
                 });
             }
         }
@@ -216,7 +216,7 @@ app.get('/login', function(req, res, next) {
             else {
                 res.status(400).send({
                     "status": "fail",
-                    "msg": "Profile Not found"
+                    "msg": "User Not found"
                 });
             }
         }
