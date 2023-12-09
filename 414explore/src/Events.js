@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Events.css';
-import Communities from './Communities.js';
+
 import keysFile from "./keys.json";
 import rsa from "./RSAEncryption";
 
@@ -10,13 +10,6 @@ const Events = ({email}) => {
     const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
-    const [page, setPage] = useState('events');
-    const [userEmail, setUserEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [interests, setInterests] = useState("");
-    const [age, setAge] = useState("");
-    const [school, setSchool] = useState("");
-    const [location, setLocation] = useState("");
 
     useEffect(() => {
         fetch('http://localhost:3001/get-Events', {
@@ -45,35 +38,6 @@ const Events = ({email}) => {
         setFilteredEvents(filtered);
     }, [selectedTags, events]);
 
-    const handleCommunitiesClick = () => {
-        setPage('communities');
-    };
-
-    const handleEventsClick = () => {
-        setPage('events');
-    };
-
-    const handleProfileClick = () => {
-        fetch("http://localhost:3001/get-User?email="+email, {
-            headers: {
-                'Authorization':rsa.encrypt("414ExploreAdmin!", keys)
-            }}).then(response2 => {
-            return response2.json();
-        }).then(user => {
-            let interests = "";
-            user.msg.intrests.forEach(item =>{
-                interests += item +" ";
-            })
-            setUsername(user.msg.userName);
-            setUserEmail(user.msg.email);
-            setInterests(interests);
-            setSchool(user.msg.school);
-            setAge(user.msg.age);
-            setLocation(user.msg.location);
-        });
-        setPage('profile');
-    };
-
     const handleTagClick = (tag) => {
         if (selectedTags.includes(tag)) {
             setSelectedTags(selectedTags.filter(t => t !== tag));
@@ -101,29 +65,14 @@ const Events = ({email}) => {
 
     return (
         <div>
-            <div className="events-header">
-                <header class="d-flex flex-wrap py-3 mb-4 border-bottom">
-                    <h1>414Explore</h1>
-                    <ul class="nav nav-pills">
-                        <li class="nav-item"><button onClick={handleEventsClick}>Events</button></li>
-                        <li className="nav-item"><button onClick={handleCommunitiesClick}>Communities</button></li>
-                        <li class="nav-item"><button onClick={handleProfileClick}>Profile</button></li>
-                    </ul>
-                </header>
-            </div>
-            {(page==="communities") && (
-                <Communities email={email}/>
-            )}
-            {(page === "events") &&
-                <div className="events-body">
-                    <nav className="navbar navbar-light bg-light">
-                        <div class="container-fluid">
-                            <form className="form-inline">
-                                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                                <button className="btn btn-outline-success" disabled={true}>Search</button>
-                            </form>
-                        </div>
-
+            <div className="events-body">
+                <nav className="navbar navbar-light bg-light">
+                    <div class="container-fluid">
+                        <form className="form-inline">
+                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                            <button className="btn btn-outline-success" disabled={true}>Search</button>
+                        </form>
+                    </div>
                         <h5>Filters:</h5>
                         <ul class="nav nav-tabs">
                             {
@@ -150,29 +99,6 @@ const Events = ({email}) => {
                         ))}
                     </div>
                 </div>
-            }
-            {(page==="profile") &&(
-                <div>
-                    <h4>
-                        User name: {username}
-                    </h4>
-                    <h4>
-                        Email: {userEmail}
-                    </h4>
-                    <h4>
-                        Age: {age}
-                    </h4>
-                    <h4>
-                        Interests: {interests}
-                    </h4>
-                    <h4>
-                        School: {school}
-                    </h4>
-                    <h4>
-                        Location: {location}
-                    </h4>
-                </div>
-            )}
         </div>
     );
 };

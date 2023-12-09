@@ -1,48 +1,25 @@
 import './Communities.css';
-import { React, useState } from 'react'
-import data from "./Communites.json"
-import Events from "./Events";
+import {React, useEffect, useState} from 'react'
 import keysFile from "./keys.json";
 import rsa from "./RSAEncryption";
 
 let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)];
 
-const Communities = ({email}) => {
-    const [inputText, setInputText] = useState("");
-    const [page, setPage] = useState("communites");
-    const [userEmail, setUserEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [interests, setInterests] = useState("");
-    const [age, setAge] = useState("");
-    const [school, setSchool] = useState("");
-    const [location, setLocation] = useState("");
-    let inputHandler = (e) => {
-        //convert input text to lower case
-        let lowerCase = e.target.value.toLowerCase();
-        setInputText(lowerCase);
-    };
+const Communities = () => {
+    const [communities, setCommunities] = useState([]);
 
-    const handleProfileClick = () => {
-        fetch("http://localhost:3001/get-User?email="+email, {
+    useEffect(() => {
+        fetch('http://localhost:3001/get-Communities', {
             headers: {
-                'Authorization':rsa.encrypt("414ExploreAdmin!", keys)
-            }}).then(response2 => {
-            return response2.json();
-        }).then(user => {
-            let interests = "";
-            user.msg.intrests.forEach(item =>{
-                interests += item +" ";
-            })
-            setUsername(user.msg.userName);
-            setUserEmail(user.msg.email);
-            setInterests(interests);
-            setSchool(user.msg.school);
-            setAge(user.msg.age);
-            setLocation(user.msg.location);
-        });
-        setPage('profile');
-    };
-    // TEXT FIELD TBD
+                "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+            }
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setCommunities(data.msg[0]);
+            });
+    }, []);
+
     return (
         <div className="main">
             <div className="search">
@@ -52,7 +29,7 @@ const Communities = ({email}) => {
                 </form>
             </div>
             <div className="card-container">
-                {data.map((item) => (
+                {communities.map((item) => (
                     <div key={item.name} className="card mb-3">
                         <div className="card-body">
                             <h5 className="card-title">{item.name}</h5>

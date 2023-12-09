@@ -12,7 +12,7 @@
 - [ ] can filter events and communities (community and event pages comming soon)
 - [ ] view but not edit profile
  
-## JSON - User
+## JSON - Profile
 - [ ] email
 - [ ] username/ display name
 - [ ] password

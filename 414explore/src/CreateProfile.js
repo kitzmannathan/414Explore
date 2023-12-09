@@ -3,21 +3,14 @@ import { useState } from 'react';
 import emailjs from 'emailjs-com';
 import keysFile from "./keys.json"
 import rsa from "./RSAEncryption";
-import Events from './Events';
-// var url = new URL("http://localhost:3001/create-User?userName=test&password="+rsa.encrypt("test", keys) + "&email=test@email.com&userType=user");
-
 
 let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)]
-function CreateProfile() {
+function CreateProfile({setPage, setEmail}) {
 
   const [view, setView] = useState("first");
   const [verificationCode, setVerificationCode] = useState(0);
   const [userEmail, setUserEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [interests, setInterests] = useState("");
-  const [age, setAge] = useState("");
-  const [school, setSchool] = useState("");
-  const [location, setLocation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [signinTries, setSigninTries] = useState(6);
@@ -97,13 +90,8 @@ function CreateProfile() {
                   if (data.status === "fail") {
                     alert(data.msg)
                   } else {
-                    setUsername(e.target.username.value);
-                    setPassword(e.target.pass.value);
-                    setInterests(interests);
-                    setSchool(e.target.school.value);
-                    setAge(e.target.age.value);
-                    setLocation(e.target.location.value);
-                    setView("events");
+                    setEmail(userEmail)
+                    setPage("Events");
                   }
                 });
               }
@@ -147,8 +135,8 @@ function CreateProfile() {
         setSigninTries(signinTries-1);
       }
       else{
-        setUserEmail(email);
-        setView("events")
+        setEmail(email);
+        setPage("Events")
       }
     });
   }
@@ -179,9 +167,6 @@ function CreateProfile() {
     // })
   return (
     <div>
-      {(view=="events") && (
-          <Events email={userEmail}/>
-      )}
       <div className="App">
         {view==="first"&&(
           <div className='loginModal'>
