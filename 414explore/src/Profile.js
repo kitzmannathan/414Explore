@@ -5,6 +5,7 @@ import rsa from "./RSAEncryption";
 let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)];
 function Profile({email}) {
     const [userEmail, setUserEmail] = useState("");
+    const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [interests, setInterests] = useState("");
     const [age, setAge] = useState("");
@@ -28,6 +29,7 @@ function Profile({email}) {
             })
             interests.substring(0,(interests.length-1));
             setUsername(user.msg.userName);
+            setName(user.msg.name);
             setUserEmail(user.msg.email);
             setInterests(interests);
             setSchool(user.msg.school);
@@ -40,6 +42,9 @@ function Profile({email}) {
         <div>
             <h4>
                 User name: {username}
+            </h4>
+            <h4>
+                Name: {name}
             </h4>
             <h4>
                 Email: {userEmail}
