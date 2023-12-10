@@ -1,6 +1,5 @@
 import './CreateProfile.css';
 import { useState } from 'react';
-import emailjs from 'emailjs-com';
 import keysFile from "./keys.json"
 import rsa from "./RSAEncryption";
 
@@ -8,13 +7,12 @@ let keys = [BigInt(keysFile.publicKey), BigInt(keysFile.modulus)]
 function CreateProfile({setPage, setEmail}) {
 
   const [view, setView] = useState("first");
-  const [verificationCode, setVerificationCode] = useState(0);
   const [userEmail, setUserEmail] = useState("");
   const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [signinTries, setSigninTries] = useState(6);
-  
+
   const [password, setPassword] = useState("");
 
   const validInterests = ["music","food","festival","fair","pop","metal","rock","country","alternative","r&b","rap"]
@@ -32,28 +30,41 @@ function CreateProfile({setPage, setEmail}) {
           alert(data.msg);
         }
         else {
-          let num = Math.floor(1000 + Math.random() * 9000);
-          setVerificationCode(num);
-          const address = {
-            reply_to: e.target.reply_to.value,
-            code: num
-          }
-          emailjs.send('service_r6rrkdo', 'template_ygla1qm', address, 'HEDXSuwTR5Q-cpA8e')
-              .then((result) => {
-                setUserEmail(e.target.reply_to.value);
-                setView("confirmation");
-
-              }, (error) => {
-                console.log(error.text);
-              });
+          fetch("http://localhost:3001/send-Email?email="+e.target.reply_to.value, {
+            headers: {
+              "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+            }
+          }).then(response => {
+            return response.json();
+          }).then(data => {
+            console.log(data);
+            if (data.status === "fail") {
+              alert(data.msg)
+            } else {
+              setUserEmail(e.target.reply_to.value);
+              setView("confirmation");
+            }
+          });
         }
       })
     }
   const confirmCode = (e) => {
     e.preventDefault();
-    if(parseInt(e.target.code.value) === verificationCode){
-      setView("unPW");
-    }
+    let code = e.target.code.value;
+    fetch("http://localhost:3001/verify-Code?email=" + userEmail +"&code="+ rsa.encrypt(code, keys), {
+      headers: {
+        "Authorization": rsa.encrypt("414ExploreAdmin!", keys)
+      }
+    }).then(response => {
+      return response.json();
+    }).then(data => {
+      console.log(data);
+      if (data.status === "fail") {
+        alert(data.msg)
+      } else {
+        setView("unPW");
+      }
+    });
 
   }
   const validateInformation = (e) =>{

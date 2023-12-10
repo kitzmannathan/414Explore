@@ -11,6 +11,8 @@ app.listen(3001);
 app.use(cors());
 //get the keys
 let keys = rsa.generateKeys();
+let emailCodes = new Map();
+
 
 //save the keys into a file for front end use
 let keysFile ={
@@ -266,6 +268,91 @@ app.get('/verify-Email', function(req, res, next) {
                     "msg": "Email is not currently in use"
                 });
             }
+        }
+    }
+    else{
+        res.status(400).send({
+            "status": "fail",
+            "msg": "Not authorized"
+        });
+    }
+});
+
+app.get('/send-Email', function(req, res, next) {
+    if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
+        let email = req.query.email;
+        if (email !== undefined) {
+            let num = Math.floor(1000 + Math.random() * 9000);
+
+            emailCodes.set(email, num);
+            var data = {
+                service_id: 'service_r6rrkdo',
+                template_id: 'template_ygla1qm',
+                user_id: 'HEDXSuwTR5Q-cpA8e',
+                template_params: {
+                    reply_to: 'kitzmann@msoe.edu',
+                    code: num
+                }
+            };
+
+            fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": 'application/json',
+                    Origin: 'http://localhost'
+                }
+            }).then(function (result) {
+                res.status(200).send({
+                    "status": "success",
+                    "msg": "Email sent"
+                });
+            }).catch(function (error) {
+                res.status(400).send({
+                    "status": "fail",
+                    "msg": error
+                });
+            });
+        }
+        else{
+            res.status(400).send({
+                "status": "fail",
+                "msg": "Email must be supplied"
+            });
+        }
+    }
+    else{
+        res.status(400).send({
+            "status": "fail",
+            "msg": "Not authorized"
+        });
+    }
+});
+
+app.get('/verify-Code', function(req, res, next) {
+    if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
+        if(req.query.email !== undefined && req.query.code !== undefined) {
+            let email = req.query.email;
+            let code = req.query.code;
+            let decrypted = rsa.decrypt(code, [keys[1],keys[2]]);
+            if (emailCodes.get(email) === Number(decrypted)){
+                res.status(200).send({
+                    "status": "success",
+                    "msg": "code is correct"
+                });
+            }
+            else{
+                res.status(400).send({
+                    "status": "fail",
+                    "msg": "Invalid code"
+                });
+            }
+        }
+        else{
+            res.status(400).send({
+                "status": "fail",
+                "msg": "Email and code must be supplied"
+            });
         }
     }
     else{
