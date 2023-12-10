@@ -11,6 +11,8 @@ app.listen(3001);
 app.use(cors());
 //get the keys
 let keys = rsa.generateKeys();
+let emailCodes = new Map();
+
 
 //save the keys into a file for front end use
 let keysFile ={
@@ -39,13 +41,20 @@ app.get('/create-User', function(req, res, next) {
         let age = req.query.age;
         let location = req.query.location;
         let userType = req.query.userType;
+        let name = req.query.name;
         let transportationPreference = req.query.transportationPreference;
         //if a required header is missing respond with an error
-        if (userName === undefined || email === undefined || password === undefined || userType === undefined) {
-            res.status(400).send({"msg":"Missing required data"});
+        if (userName === undefined || email === undefined || password === undefined || userType === undefined || name === undefined) {
+            res.status(400).send({
+                "status": "fail",
+                "msg": "Missing required data"
+            });
         } else {
             if (intrests !== undefined && intrests.at(0) !== "[" && intrests.at(intrests.length - 1) !== "]") {
-                res.status(400).send({"msg":"intrests should be an array"});
+                res.status(400).send({
+                    "status": "fail",
+                    "msg": "Interests should be an array"
+                });
             } else {
                 let temp = []
                 let intrestsArray = []
@@ -67,6 +76,7 @@ app.get('/create-User', function(req, res, next) {
                     const newUser = {
                         userType: userType,
                         email: email,
+                        name: name,
                         userName: userName,
                         password: decrypt(password, [keys[1], keys[2]]),
                         school: school,
@@ -80,7 +90,7 @@ app.get('/create-User', function(req, res, next) {
                     fs.writeFileSync("./src/Users.json", JSON.stringify(users), "utf-8");
                     res.status(200).send({
                         "status": "success",
-                        "msg": users
+                        "msg": "User created"
                     });
                 }
                 else{
@@ -228,5 +238,129 @@ app.get('/login', function(req, res, next) {
         });
     }
 })
+
+app.get('/verify-Email', function(req, res, next) {
+    //if authorization was passed as a header and it is the correct password then return the communities
+    if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
+        let email = req.query.email;
+        let users = JSON.parse(fs.readFileSync("./src/Users.json", "utf-8"));
+        if (email === undefined) {
+            res.status(400).send({
+                "status": "fail",
+                "msg": "Email not defined"
+            });
+        } else {
+            let found = false;
+            users.forEach(user => {
+                if (user.email === email) {
+                    found = true;
+                }
+            });
+            if(found){
+                res.status(400).send({
+                    "status": "fail",
+                    "msg": "Email is currently in use"
+                });
+            }
+            else {
+                res.status(200).send({
+                    "status": "success",
+                    "msg": "Email is not currently in use"
+                });
+            }
+        }
+    }
+    else{
+        res.status(400).send({
+            "status": "fail",
+            "msg": "Not authorized"
+        });
+    }
+});
+
+app.get('/send-Email', function(req, res, next) {
+    if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
+        let email = req.query.email;
+        if (email !== undefined) {
+            let num = Math.floor(1000 + Math.random() * 9000);
+
+            emailCodes.set(email, num);
+            var data = {
+                service_id: 'service_r6rrkdo',
+                template_id: 'template_ygla1qm',
+                user_id: 'HEDXSuwTR5Q-cpA8e',
+                template_params: {
+                    reply_to: email,
+                    code: num
+                }
+            };
+
+            fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": 'application/json',
+                    Origin: 'http://localhost'
+                }
+            }).then(function (result) {
+                res.status(200).send({
+                    "status": "success",
+                    "msg": "Email sent"
+                });
+            }).catch(function (error) {
+                res.status(400).send({
+                    "status": "fail",
+                    "msg": error
+                });
+            });
+        }
+        else{
+            res.status(400).send({
+                "status": "fail",
+                "msg": "Email must be supplied"
+            });
+        }
+    }
+    else{
+        res.status(400).send({
+            "status": "fail",
+            "msg": "Not authorized"
+        });
+    }
+});
+
+app.get('/verify-Code', function(req, res, next) {
+    if(req.headers.authorization !== undefined && req.headers.authorization !== "" && rsa.decrypt(req.headers.authorization, [keys[1],keys[2]]) === "414ExploreAdmin!") {
+        if(req.query.email !== undefined && req.query.code !== undefined) {
+            let email = req.query.email;
+            let code = req.query.code;
+            let decrypted = rsa.decrypt(code, [keys[1],keys[2]]);
+            if (emailCodes.get(email) === Number(decrypted)){
+                res.status(200).send({
+                    "status": "success",
+                    "msg": "code is correct"
+                });
+            }
+            else{
+                res.status(400).send({
+                    "status": "fail",
+                    "msg": "Invalid code"
+                });
+            }
+        }
+        else{
+            res.status(400).send({
+                "status": "fail",
+                "msg": "Email and code must be supplied"
+            });
+        }
+    }
+    else{
+        res.status(400).send({
+            "status": "fail",
+            "msg": "Not authorized"
+        });
+    }
+});
 
 module.exports = app;

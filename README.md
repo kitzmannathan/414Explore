@@ -1,45 +1,6 @@
-# 414Explore
-*Goal: Creating a Profile & Logging In*
- 
-## UI
-- [x ] sign up or login
-- [x ] event organizer (disabled) or user
-- [x ] email & confirm email
-- [x ] username & password
-- [ ] selecting interests
-- [ ] location, school, age, transpo
-- [ ] once the user SAVES they can view events and communities
-- [ ] can filter events and communities (community and event pages comming soon)
-- [ ] view but not edit profile
- 
-## JSON - User
-- [ ] email
-- [ ] username/ display name
-- [ ] password
-- [ ] user type
-- [ ] interests *
-- [ ] location *
-- [ ] school*
-- [ ] age *
-- [ ] transportation preferences *
-- [ ] *optional
- 
-## JSON - Event
-- [ ] name
-- [ ] organizer
-- [ ] date
-- [ ] location
-- [ ] tags (collection) - from set list
- 
-## JSON - Community
-- [ ] name
-- [ ] no. of members
-- [ ] tags
- 
- 
-## Logic
-- [ ] limit login attempts to 5
-- [ ] console log successful login: "username" has logged in "date:time"
-- [ ] console log unsuccessful login: "username" has attempted to log in "date:time" attempt # "#"
-- [ ] save log in attempts to text file
-- [ ] express server backend to call data
+# Running 414Explore
+1. Clone down the repo (git clone https://github.com/kitzmannathan/414Explore.git)
+2. You can either cd to where you cloned your project and then int the first 414Explore folder where the StartApplication.bat is and run .\StartApplication.bat
+3. Or open file explorer and go to where you cloned the repo and run the StartApplication.bat file 
+4. On the node installer press next > i accept the terms and conditions and next > next > next > next > install > and finally when done finish
+5. Application should now be opened in browser and ready to go
