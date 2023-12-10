@@ -290,7 +290,7 @@ app.get('/send-Email', function(req, res, next) {
                 template_id: 'template_ygla1qm',
                 user_id: 'HEDXSuwTR5Q-cpA8e',
                 template_params: {
-                    reply_to: 'kitzmann@msoe.edu',
+                    reply_to: email,
                     code: num
                 }
             };

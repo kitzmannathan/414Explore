@@ -206,7 +206,7 @@ function CreateProfile({setPage, setEmail}) {
       <div className="App">
         {view==="first"&&(
           <div className='loginModal'>
-            <h1>414Explore</h1>
+            <h2>414Explore</h2>
             <h4>Discover all the Milwaukee has to offer.</h4>
             <button className='topButton' onClick={() => setView("create")}>Create Profile</button>
             <button className='bottomButton' onClick={() => setView("signIn")} >Sign In</button>
